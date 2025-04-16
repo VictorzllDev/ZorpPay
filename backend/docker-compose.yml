@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:alpine
+    container_name: zorppay_postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: zorppay_db
+    volumes:
+      - zorppay_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  zorppay_postgres_data:
