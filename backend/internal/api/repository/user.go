@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/VictorzllDev/ZorpPay/backend/internal/domain"
+	"github.com/VictorzllDev/ZorpPay/backend/internal/domain/entities"
 	"gorm.io/gorm"
 )
 

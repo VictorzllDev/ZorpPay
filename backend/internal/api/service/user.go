@@ -1,9 +1,13 @@
 package service
 
 import (
+	"errors"
+	"fmt"
+
 	"github.com/VictorzllDev/ZorpPay/backend/internal/api/repository"
-	"github.com/VictorzllDev/ZorpPay/backend/internal/domain"
-	"github.com/VictorzllDev/ZorpPay/backend/internal/valueobjects/email"
+	"github.com/VictorzllDev/ZorpPay/backend/internal/domain/entities"
+	"github.com/VictorzllDev/ZorpPay/backend/internal/domain/valueobjects/email"
+	"github.com/VictorzllDev/ZorpPay/backend/internal/pkg/security"
 )
 
 type UserService interface {
@@ -20,12 +24,25 @@ func NewUserService(repository repository.UserRepository) UserService {
 }
 
 func (s *userService) CreateUser(user *domain.User) error {
+	if user == nil {
+		return errors.New("user is nil")
+	}
+
 	email, err := email.New(user.Email)
 	if err != nil {
 		return err
 	}
 
-	user.Email = email.String()
+	existingUser, _ := s.repository.FindByEmail(email.String())
+	if existingUser != nil {
+		return errors.New("user already exists")
+	}
+
+	hash, err := security.GenerateHash(user.Password)
+	if err != nil {
+		return fmt.Errorf("password hashing failed: %w", err)
+	}
+	user.Password = string(hash)
 
 	return s.repository.Save(user)
 }

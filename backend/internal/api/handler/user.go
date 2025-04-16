@@ -1,9 +1,12 @@
 package handler
 
 import (
-	"github.com/VictorzllDev/ZorpPay/backend/internal/api/service"
-	"github.com/VictorzllDev/ZorpPay/backend/internal/domain"
 	"net/http"
+
+	"github.com/VictorzllDev/ZorpPay/backend/internal/api/dto/request"
+	"github.com/VictorzllDev/ZorpPay/backend/internal/api/dto/response"
+	"github.com/VictorzllDev/ZorpPay/backend/internal/api/service"
+	"github.com/VictorzllDev/ZorpPay/backend/internal/domain/entities"
 
 	"github.com/gin-gonic/gin"
 )
@@ -21,24 +24,17 @@ func NewUserHandler(service service.UserService) *UserHandler {
 }
 
 func (h *UserHandler) CreateUser(c *gin.Context) {
-	var input struct {
-		Name     string `json:"name" binding:"required,min=3,max=100"`
-		Email    string `json:"email" binding:"required,email"`
-		Password string `json:"password" binding:"required,min=8"`
-	}
+	var req request.CreateUser
 
-	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error":   "validation_error",
-			"message": err.Error(),
-		})
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	user := domain.User{
-		Name:     input.Name,
-		Email:    input.Email,
-		Password: input.Password,
+		Name:     req.Name,
+		Email:    req.Email,
+		Password: req.Password,
 	}
 
 	if err := h.service.CreateUser(&user); err != nil {
@@ -46,7 +42,13 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, user)
+	res := response.User{
+		ID:    user.ID,
+		Name:  user.Name,
+		Email: user.Email,
+	}
+
+	c.JSON(http.StatusCreated, res)
 }
 
 func (h *UserHandler) GetUser(c *gin.Context) {
@@ -56,5 +58,13 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, users)
+	res := []response.User{}
+	for _, user := range users {
+		res = append(res, response.User{
+			ID:    user.ID,
+			Name:  user.Name,
+			Email: user.Email,
+		})
+	}
+	c.JSON(http.StatusOK, res)
 }
