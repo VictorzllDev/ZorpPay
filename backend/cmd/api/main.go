@@ -7,9 +7,8 @@ import (
 	"github.com/VictorzllDev/ZorpPay/backend/internal/api/service"
 	"github.com/VictorzllDev/ZorpPay/backend/internal/config"
 	"github.com/VictorzllDev/ZorpPay/backend/internal/database"
-	"log"
-
 	"github.com/gin-gonic/gin"
+	"log"
 )
 
 func main() {
@@ -27,11 +26,11 @@ func main() {
 	userService := service.NewUserService(userRepo)
 	userHandler := handler.NewUserHandler(userService)
 
-	router := gin.Default()
-	routes.SetupRoutes(router, userHandler)
+	r := gin.Default()
+	routes.UserRoutes(r, userHandler)
 
 	log.Println("Server running on port", cfg.Port)
-	if err := router.Run(":" + cfg.Port); err != nil {
+	if err := r.Run(":" + cfg.Port); err != nil {
 		log.Fatal("Failed to start server:", err)
 	}
 }
