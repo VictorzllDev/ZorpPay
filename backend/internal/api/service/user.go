@@ -24,16 +24,12 @@ func NewUserService(repository repository.UserRepository) UserService {
 }
 
 func (s *userService) CreateUser(user *domain.User) error {
-	if user == nil {
-		return errors.New("user is nil")
-	}
-
 	email, err := email.New(user.Email)
 	if err != nil {
 		return err
 	}
 
-	existingUser, _ := s.repository.FindByEmail(email.String())
+	existingUser := s.repository.FindByEmail(email.String())
 	if existingUser != nil {
 		return errors.New("user already exists")
 	}

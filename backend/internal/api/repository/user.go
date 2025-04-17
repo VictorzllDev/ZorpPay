@@ -8,7 +8,7 @@ import (
 type UserRepository interface {
 	Save(user *domain.User) error
 	FindAll() ([]domain.User, error)
-	FindByEmail(email string) (*domain.User, error)
+	FindByEmail(email string) *domain.User
 }
 
 type userRepository struct {
@@ -31,10 +31,14 @@ func (r *userRepository) FindAll() ([]domain.User, error) {
 	return users, nil
 }
 
-func (r *userRepository) FindByEmail(email string) (*domain.User, error) {
+func (r *userRepository) FindByEmail(email string) *domain.User {
 	var user domain.User
-	if err := r.db.Where("email = ?", email).First(&user).Error; err != nil {
-		return nil, err
+
+	r.db.Where("email = ?", email).Find(&user)
+
+	if user.ID == 0 {
+		return nil
 	}
-	return &user, nil
+
+	return &user
 }

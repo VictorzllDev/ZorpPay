@@ -15,10 +15,6 @@ type UserHandler struct {
 	service service.UserService
 }
 
-type Config struct {
-	R *gin.Engine
-}
-
 func NewUserHandler(service service.UserService) *UserHandler {
 	return &UserHandler{service: service}
 }
