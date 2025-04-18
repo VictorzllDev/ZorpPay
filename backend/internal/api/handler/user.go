@@ -1,14 +1,12 @@
 package handler
 
 import (
-	"net/http"
-
 	"github.com/VictorzllDev/ZorpPay/backend/internal/api/dto/request"
 	"github.com/VictorzllDev/ZorpPay/backend/internal/api/dto/response"
 	"github.com/VictorzllDev/ZorpPay/backend/internal/api/service"
 	"github.com/VictorzllDev/ZorpPay/backend/internal/domain/entities"
-
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 type UserHandler struct {
@@ -19,6 +17,14 @@ func NewUserHandler(service service.UserService) *UserHandler {
 	return &UserHandler{service: service}
 }
 
+// @Summary Create a new user
+// @Description Create a new CreateUser
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param CreateUser body request.CreateUser true "CreateUser"
+// @Success 201 {object} response.User
+// @Router /users [post]
 func (h *UserHandler) CreateUser(c *gin.Context) {
 	var req request.CreateUser
 
@@ -47,6 +53,13 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 	c.JSON(http.StatusCreated, res)
 }
 
+// @Summary Get all users
+// @Description Get all users
+// @Tags User
+// @Accept json
+// @Produce json
+// @Success 200 {array} response.User
+// @Router /users [get]
 func (h *UserHandler) GetUser(c *gin.Context) {
 	users, err := h.service.GetAllUser()
 	if err != nil {
