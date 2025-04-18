@@ -6,7 +6,7 @@ import (
 )
 
 func UserRoutes(r *gin.Engine, h *handler.UserHandler) {
-	userGroup := r.Group("/v1/users")
+	userGroup := r.Group("/api/v1/users")
 	{
 		userGroup.POST("", h.CreateUser)
 		userGroup.GET("", h.GetUser)
