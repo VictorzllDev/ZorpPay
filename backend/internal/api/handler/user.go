@@ -33,7 +33,7 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 		return
 	}
 
-	user := domain.User{
+	user := entities.User{
 		Name:     req.Name,
 		Email:    req.Email,
 		Password: req.Password,
