@@ -41,10 +41,15 @@ func main() {
 	dayService := service.NewDayService(dayRepo)
 	dayHandler := handler.NewDayHandler(dayService)
 
+	paymentRepo := repository.NewPaymentRepository(db)
+	paymentService := service.NewPaymentService(paymentRepo)
+	paymentHandler := handler.NewPaymentHandler(paymentService)
+
 	// Routes
 	r := gin.Default()
 	routes.UserRoutes(r, userHandler)
 	routes.DayRoutes(r, dayHandler)
+	routes.PaymentRoutes(r, paymentHandler)
 
 	// Specific Routes for Development
 	if cfg.Env == "development" {
