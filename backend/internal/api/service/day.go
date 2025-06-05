@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/VictorzllDev/ZorpPay/backend/internal/api/repository"
 	"github.com/VictorzllDev/ZorpPay/backend/internal/domain/entities"
@@ -29,6 +30,10 @@ func (s *dayService) CreateDay(day *entities.Day) error {
 
 	if day.Date.IsZero() {
 		return errors.New("data inválida")
+	}
+
+	if day.Date.After(time.Now()) {
+		return errors.New("não é permitido datas futuras")
 	}
 
 	// Verifica se o dia já existe para o usuário
