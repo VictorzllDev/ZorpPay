@@ -11,8 +11,8 @@ import (
 )
 
 type UserService interface {
-	CreateUser(user *domain.User) error
-	GetAllUser() ([]domain.User, error)
+	CreateUser(user *entities.User) error
+	GetAllUser() ([]entities.User, error)
 }
 
 type userService struct {
@@ -23,7 +23,7 @@ func NewUserService(repository repository.UserRepository) UserService {
 	return &userService{repository: repository}
 }
 
-func (s *userService) CreateUser(user *domain.User) error {
+func (s *userService) CreateUser(user *entities.User) error {
 	email, err := email.New(user.Email)
 	if err != nil {
 		return err
@@ -43,6 +43,6 @@ func (s *userService) CreateUser(user *domain.User) error {
 	return s.repository.Save(user)
 }
 
-func (s *userService) GetAllUser() ([]domain.User, error) {
+func (s *userService) GetAllUser() ([]entities.User, error) {
 	return s.repository.FindAll()
 }

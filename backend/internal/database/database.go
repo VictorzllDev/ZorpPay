@@ -13,7 +13,7 @@ func Connect(dsn string) (*gorm.DB, error) {
 	}
 
 	// Executar migrations
-	if err := domain.Migrate(db); err != nil {
+	if err := entities.Migrate(db); err != nil {
 		return nil, err
 	}
 
