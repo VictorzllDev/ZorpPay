@@ -34,12 +34,12 @@ func (s *paymentService) CreatePayment(payment *entities.Payment) error {
 		return errors.New("não é permitido pagamentos futuros")
 	}
 
-	totalDays, err := s.repository.CountDays()
+	totalDays, err := s.repository.CountUserDays(payment.UserID)
 	if err != nil {
 		return fmt.Errorf("erro ao buscar dias letivos: %v", err)
 	}
 
-	totalUsedInPayments, err := s.repository.GetTotalUsedInPayments()
+	totalUsedInPayments, err := s.repository.GetUserTotalPayments(payment.UserID)
 	if err != nil {
 		return fmt.Errorf("erro ao buscar pagamentos existentes: %v", err)
 	}
