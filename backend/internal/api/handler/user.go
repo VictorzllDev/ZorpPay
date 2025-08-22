@@ -60,7 +60,7 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 // @Produce json
 // @Success 200 {array} response.User
 // @Router /users [get]
-func (h *UserHandler) GetUser(c *gin.Context) {
+func (h *UserHandler) GetAllUser(c *gin.Context) {
 	users, err := h.service.GetAllUser()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
