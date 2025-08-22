@@ -9,6 +9,6 @@ func UserRoutes(r *gin.Engine, h *handler.UserHandler) {
 	userGroup := r.Group("/api/v1/users")
 	{
 		userGroup.POST("", h.CreateUser)
-		userGroup.GET("", h.GetUser)
+		userGroup.GET("", h.GetAllUser)
 	}
 }
