@@ -20,6 +20,7 @@ func NewUserHandler(service service.UserService) *UserHandler {
 // @Summary Create a new user
 // @Description Create a new CreateUser
 // @Tags User
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Param CreateUser body request.CreateUser true "CreateUser"

@@ -1,19 +1,26 @@
 package main
 
 import (
+	"log"
+
 	"github.com/VictorzllDev/ZorpPay/backend/internal/api/handler"
 	"github.com/VictorzllDev/ZorpPay/backend/internal/api/repository"
 	"github.com/VictorzllDev/ZorpPay/backend/internal/api/routes"
 	"github.com/VictorzllDev/ZorpPay/backend/internal/api/service"
 	"github.com/VictorzllDev/ZorpPay/backend/internal/config"
 	"github.com/VictorzllDev/ZorpPay/backend/internal/database"
+	"github.com/VictorzllDev/ZorpPay/backend/internal/pkg/security"
 	"github.com/gin-gonic/gin"
-	"log"
 )
 
 // @title           ZorpPay
-// @version         1.0.0
+// @version         0.5.0
 // @description     ZorpPay API Documentation
+
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+// @description Type: Bearer token. Example: "Bearer your_jwt_token_here"
 
 // @contact.name   VictorzllDev
 // contact.url    https://github.com/VictorzllDev
@@ -33,6 +40,10 @@ func main() {
 	}
 
 	// Dependence injection
+	authRepo := repository.NewAuthRepository(db)
+	authService := service.NewAuthService(authRepo)
+	authHandler := handler.NewAuthHandler(authService)
+
 	userRepo := repository.NewUserRepository(db)
 	userService := service.NewUserService(userRepo)
 	userHandler := handler.NewUserHandler(userService)
@@ -45,11 +56,15 @@ func main() {
 	paymentService := service.NewPaymentService(paymentRepo)
 	paymentHandler := handler.NewPaymentHandler(paymentService)
 
+	// JWT
+	jwtService := security.NewJWT()
+
 	// Routes
 	r := gin.Default()
-	routes.UserRoutes(r, userHandler)
-	routes.DayRoutes(r, dayHandler)
-	routes.PaymentRoutes(r, paymentHandler)
+	routes.AuthRoutes(r, authHandler)
+	routes.UserRoutes(r, userHandler, jwtService)
+	routes.DayRoutes(r, dayHandler, jwtService)
+	routes.PaymentRoutes(r, paymentHandler, jwtService)
 
 	// Specific Routes for Development
 	if cfg.Env == "development" {

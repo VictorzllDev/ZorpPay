@@ -8,9 +8,11 @@ import (
 )
 
 type Config struct {
-	Port        string `env:"PORT" envDefault:"3333"`
-	Env         string `env:"ENV" envDefault:"development"`
-	DatabaseURL string `env:"DATABASE_URL,required"`
+	Port         string `env:"PORT" envDefault:"3333"`
+	Env          string `env:"ENV" envDefault:"development"`
+	DatabaseURL  string `env:"DATABASE_URL,required"`
+	JWTSecretKey string `env:"JWT_SECRET_KEY,required"`
+	JWTIssuer    string `env:"JWT_ISSUER,required"`
 }
 
 func Load() (*Config, error) {

@@ -3,7 +3,7 @@ APP_NAME      := ZorpPay
 BINARY_DIR    := bin
 SWAGGER_DIR   := docs
 MAIN_PATH     := cmd/api/main.go
-VERSION       := 1.0.0
+VERSION       := 0.5.0
 GOFLAGS       := -ldflags="-s -w -X main.version=$(VERSION)"
 
 # Cores (compatíveis com Kitty)

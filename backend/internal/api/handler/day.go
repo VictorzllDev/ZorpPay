@@ -23,6 +23,7 @@ func NewDayHandler(service service.DayService) *DayHandler {
 // @Summary Create a new day
 // @Description Create a new Day, associating it to a user
 // @Tags Day
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Param Day body request.CreateDay true "Day"

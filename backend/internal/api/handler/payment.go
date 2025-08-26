@@ -23,6 +23,7 @@ func NewPaymentHandler(service service.PaymentService) *PaymentHandler {
 // @Summary Create a new Payment
 // @Description Create a new Payment, associating it to a user
 // @Tags Payment
+// @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Param Payment body request.CreatePayment true "Payment"
