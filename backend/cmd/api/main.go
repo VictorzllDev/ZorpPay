@@ -10,11 +10,12 @@ import (
 	"github.com/VictorzllDev/ZorpPay/backend/internal/config"
 	"github.com/VictorzllDev/ZorpPay/backend/internal/database"
 	"github.com/VictorzllDev/ZorpPay/backend/internal/pkg/security"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 // @title           ZorpPay
-// @version         0.5.0
+// @version         0.6.0
 // @description     ZorpPay API Documentation
 
 // @securityDefinitions.apikey BearerAuth
@@ -61,6 +62,11 @@ func main() {
 
 	// Routes
 	r := gin.Default()
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowHeaders:     []string{"*"},
+		AllowCredentials: true,
+	}))
 	routes.AuthRoutes(r, authHandler)
 	routes.UserRoutes(r, userHandler, jwtService)
 	routes.DayRoutes(r, dayHandler, jwtService)

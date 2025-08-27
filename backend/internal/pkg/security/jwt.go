@@ -22,7 +22,7 @@ type jwtService struct {
 }
 
 type JWTClaims struct {
-	UserID string `json:"user_id"`
+	sub string
 	jwt.RegisteredClaims
 }
 
@@ -41,7 +41,7 @@ func NewJWT() JWTService {
 
 func (j *jwtService) GenerateToken(userID string) (string, error) {
 	claims := &JWTClaims{
-		UserID: userID,
+		sub: userID,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(j.expiration)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
@@ -84,5 +84,5 @@ func (j *jwtService) GetUserIDFromToken(tokenString string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return claims.UserID, nil
+	return claims.sub, nil
 }
